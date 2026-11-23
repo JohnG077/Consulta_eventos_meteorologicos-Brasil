@@ -1,0 +1,178 @@
+
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Monitoramento Climático | INMET</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">PROJETO ACADÊMICO · DADOS HISTÓRICOS</div>
+
+            <h1>Monitoramento Climático</h1>
+
+            <p>Explore registros de precipitação e rajadas de vento observados pelo INMET.</p>
+
+            <div class="period">Período disponível: 01/01/2026 a 31/10/2026</div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="wrap tabs">
+            <button class="tab active" data-tab="estado">Consulta por estado</button>
+            <button class="tab" data-tab="tempo">Consulta por data e horário</button>
+            <button class="tab" data-tab="estacoes">Estações meteorológicas</button>
+            <button class="tab" data-tab="ranking">Maiores eventos</button>
+        </div>
+    </nav>
+
+    <main class="wrap">
+
+        <section id="estado" class="panel active">
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">EXPLORAÇÃO ESTADUAL</span>
+
+                    <h2>Consulte um estado</h2>
+
+                    <p>Selecione uma unidade federativa para visualizar os extremos registrados nas estações disponíveis.</p>
+                </div>
+            </div>
+
+            <div class="filter">
+                <label for="ufSelect">Estado</label>
+                <select id="ufSelect"></select>
+            </div>
+
+            <div id="stateContent"></div>
+
+        </section>
+
+        <script src="estacoes.js"></script>
+
+        <section id="tempo" class="panel">
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">CONSULTA TEMPORAL</span>
+
+                    <h2>Registros por data e horário</h2>
+
+                    <p>Filtre as observações horárias da estação cujo CSV foi incluído no pacote.</p>
+                </div>
+            </div>
+
+            <div class="notice">
+                <b>Escopo desta versão:</b> esta consulta horária contém somente a estação de <span id="stationName"></span>, no Paraná. Para consultar todas as estações, precisamos importar os demais CSVs ou JSONs individuais.
+            </div>
+
+            <div class="filters">
+                <div>
+                    <label>Estação Meteorológica</label>
+
+                </div>
+
+                <div>
+                    <label for="dateSelect">Data</label>
+
+                    <input type="date" id="dateSelect" min="2026-01-01" max="2026-10-31">
+                </div>
+
+                <div>
+                    <label for="hourSelect">Horário UTC</label>
+
+                    <select id="hourSelect">
+                        <option value="">Todos os horários</option>
+                    </select>
+                </div>
+
+                <button id="searchTime">Consultar</button>
+
+            </div>
+
+            <div id="timeResults"></div>
+
+        </section>
+
+        <section id="estacoes" class="panel">
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">BASE METEOROLÓGICA</span>
+        
+                    <h2>Estações meteorológicas</h2>
+        
+                    <p>
+                        Pesquise uma das 634 estações disponíveis
+                        e consulte seus registros máximos.
+                    </p>
+                </div>
+            </div>
+        
+            <div class="filter">
+                <label for="buscaEstacao">Pesquisar estação</label>
+        
+                <input
+                    type="text"
+                    id="buscaEstacao"
+                    placeholder="Nome, estado, região ou código WMO..."
+                >
+            </div>
+        
+            <div id="resultadoEstacoes">
+                <p>Carregando estações...</p>
+            </div>
+        
+        </section>
+
+        <section id="ranking" class="panel">
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">DESTAQUES DO PERÍODO</span>
+
+                    <h2>Maiores eventos registrados</h2>
+
+                    <p>Ranking nacional calculado a partir dos resultados consolidados.</p>
+                </div>
+            </div>
+
+            <div class="two-col">
+
+                <div class="card">
+                    <h3>Precipitação horária</h3>
+
+                    <div id="rainRanking"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Rajadas de vento</h3>
+
+                    <div id="windRanking"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer>
+            <p>Projeto acadêmico baseado em dados históricos do INMET. Não constitui previsão meteorológica nem alerta oficial.</p>
+
+            <p>Horários apresentados nos registros originais em UTC.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
