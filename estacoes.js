@@ -8,20 +8,33 @@ async function carregarEstacoes() {
         const resposta = await fetch("data/estacoes.json");
 
         if (!resposta.ok) {
-            throw new Error("Não foi possível carregar os dados.");
+            throw new Error(`Erro HTTP ${resposta.status}: arquivo não encontrado.`);
         }
 
         todasEstacoes = await resposta.json();
 
+        if (!Array.isArray(todasEstacoes)) {
+            throw new Error("O arquivo JSON não contém uma lista de estações.");
+        }
+
+        console.log("Estações carregadas:", todasEstacoes.length);
+
         resultado.innerHTML = `
-            <p>${todasEstacoes.length} estações carregadas.</p>
+            <p><strong>${todasEstacoes.length}</strong> estações carregadas.</p>
         `;
 
         exibirEstacoes(todasEstacoes);
 
     } catch (erro) {
+
+        console.error("Erro ao carregar estações:", erro);
+
         resultado.innerHTML = `
-            <p>Erro ao carregar as estações: ${erro.message}</p>
+            <div class="notice">
+                Não foi possível carregar as estações.
+                <br>
+                Erro: ${erro.message}
+            </div>
         `;
     }
 }
@@ -31,12 +44,16 @@ function exibirEstacoes(estacoes) {
     const resultado = document.getElementById("resultadoEstacoes");
 
     if (estacoes.length === 0) {
-        resultado.innerHTML = "<p>Nenhuma estação encontrada.</p>";
+        resultado.innerHTML = `
+            <p>Nenhuma estação encontrada.</p>
+        `;
+
         return;
     }
 
     resultado.innerHTML = estacoes.map(estacao => `
         <article class="estacao-card">
+
             <h3>${estacao.estacao}</h3>
 
             <p>
@@ -51,7 +68,8 @@ function exibirEstacoes(estacoes) {
             </p>
 
             <p>
-                <strong>Período:</strong> ${estacao.periodo}
+                <strong>Período:</strong>
+                ${estacao.periodo || "Não informado"}
             </p>
 
             <hr>
@@ -61,13 +79,13 @@ function exibirEstacoes(estacoes) {
             <p>
                 Máxima horária:
                 <strong>
-                    ${estacao.precipitacao.maxima_horaria_mm ?? "N/D"} mm
+                    ${estacao.precipitacao?.maxima_horaria_mm ?? "N/D"} mm
                 </strong>
             </p>
 
             <p>
                 Data:
-                ${estacao.precipitacao.data_maxima || "N/D"}
+                ${estacao.precipitacao?.data_maxima || "N/D"}
             </p>
 
             <h4>Rajada de vento</h4>
@@ -75,13 +93,13 @@ function exibirEstacoes(estacoes) {
             <p>
                 Máxima:
                 <strong>
-                    ${estacao.rajada_vento.maxima_kmh ?? "N/D"} km/h
+                    ${estacao.rajada_vento?.maxima_kmh ?? "N/D"} km/h
                 </strong>
             </p>
 
             <p>
                 Data:
-                ${estacao.rajada_vento.data_maxima || "N/D"}
+                ${estacao.rajada_vento?.data_maxima || "N/D"}
             </p>
 
             <hr>
@@ -90,12 +108,14 @@ function exibirEstacoes(estacoes) {
                 <strong>Total de registros:</strong>
                 ${estacao.total_registros ?? "N/D"}
             </p>
+
         </article>
+
     `).join("");
 }
 
 
-document.getElementById("buscaEstacao").addEventListener("input", (evento) => {
+document.getElementById("buscaEstacao").addEventListener("input", evento => {
     const termo = evento.target.value.toLowerCase().trim();
 
     const filtradas = todasEstacoes.filter(estacao => {
@@ -105,8 +125,7 @@ document.getElementById("buscaEstacao").addEventListener("input", (evento) => {
             (estacao.regiao || "").toLowerCase().includes(termo) ||
             (estacao.codigo_wmo || "").toLowerCase().includes(termo)
         );
-    });
-
+    });  
     exibirEstacoes(filtradas);
 });
 

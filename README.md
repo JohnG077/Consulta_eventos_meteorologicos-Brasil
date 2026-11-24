@@ -1,4 +1,4 @@
-MONITORAMENTO CLIMÁTICO INMET
+# SISTEMA DE CONSULTA DE EVENTOS METEOROLÓGICOS NO BRASIL
 Este é um protótipo do site de monitoramento climático com os dados INMET. Ao decorrer do desenvolvimento, este arquivo será atualizado.
 
 Classificação indicativa:

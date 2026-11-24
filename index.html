@@ -19,160 +19,194 @@
 
             <h1>Monitoramento Climático</h1>
 
-            <p>Explore registros de precipitação e rajadas de vento observados pelo INMET.</p>
+            <p>
+                Explore registros de precipitação e rajadas de vento observados pelo INMET.
+            </p>
 
-            <div class="period">Período disponível: 01/01/2026 a 31/10/2026</div>
+            <div class="period">
+                Período disponível: 01/01/2026 a 31/10/2026
+            </div>
         </div>
     </header>
 
     <nav>
         <div class="wrap tabs">
-            <button class="tab active" data-tab="estado">Consulta por estado</button>
-            <button class="tab" data-tab="tempo">Consulta por data e horário</button>
-            <button class="tab" data-tab="estacoes">Estações meteorológicas</button>
-            <button class="tab" data-tab="ranking">Maiores eventos</button>
+            <button class="tab active" data-tab="historico">
+                Consulta histórica
+            </button>
+
+            <button class="tab" data-tab="explorar">
+                Maiores eventos
+            </button>
         </div>
     </nav>
 
     <main class="wrap">
-
-        <section id="estado" class="panel active">
+        <section id="explorar" class="panel">
 
             <div class="section-head">
                 <div>
-                    <span class="eyebrow">EXPLORAÇÃO ESTADUAL</span>
+                    <span class="eyebrow">EXPLORAÇÃO DOS DADOS</span>
 
-                    <h2>Consulte um estado</h2>
+                    <h2>Estações e eventos meteorológicos</h2>
 
-                    <p>Selecione uma unidade federativa para visualizar os extremos registrados nas estações disponíveis.</p>
+                    <p>
+                        Consulte os registros por estado ou pesquise diretamente uma estação meteorológica.
+                    </p>
                 </div>
             </div>
 
-            <div class="filter">
-                <label for="ufSelect">Estado</label>
-                <select id="ufSelect"></select>
+            <div class="filters">
+
+                <div>
+                    <label for="ufSelect">Estado</label>
+
+                    <select id="ufSelect">
+                        <option value="">Todos os estados</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="buscaEstacao">Estação meteorológica</label>
+
+                    <input
+                        type="text"
+                        id="buscaEstacao"
+                        placeholder="Nome, código da estação ou região..."
+                    >
+                </div>
+
             </div>
 
             <div id="stateContent"></div>
 
+            <div id="stationResults"></div>
+
+            <div id="rankingSection">
+
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">DESTAQUES DO PERÍODO</span>
+
+                        <h2>Maiores eventos registrados</h2>
+
+                        <p>
+                            Estações com os maiores extremos meteorológicos observados no período analisado.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="two-col">
+
+                    <div class="card">
+                        <h3>Precipitação horária</h3>
+                        <div id="rainRanking"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Rajadas de vento</h3>
+                        <div id="windRanking"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
         </section>
 
-        <script src="estacoes.js"></script>
-
-        <section id="tempo" class="panel">
+        <section id="historico" class="panel active">
 
             <div class="section-head">
                 <div>
                     <span class="eyebrow">CONSULTA TEMPORAL</span>
 
-                    <h2>Registros por data e horário</h2>
+                    <h2>Explore os registros históricos</h2>
 
-                    <p>Filtre as observações horárias da estação cujo CSV foi incluído no pacote.</p>
+                    <p>
+                        Combine estação, data e horário para consultar as observações meteorológicas.
+                    </p>
                 </div>
-            </div>
-
-            <div class="notice">
-                <b>Escopo desta versão:</b> esta consulta horária contém somente a estação de <span id="stationName"></span>, no Paraná. Para consultar todas as estações, precisamos importar os demais CSVs ou JSONs individuais.
             </div>
 
             <div class="filters">
-                <div>
-                    <label>Estação Meteorológica</label>
 
+                <div>
+                    <label for="historicoEstacao">
+                        Estação
+                    </label>
+
+                    <input
+                        type="text"
+                        id="historicoEstacao"
+                        placeholder="Nome ou código WMO..."
+                    >
                 </div>
 
                 <div>
-                    <label for="dateSelect">Data</label>
+                    <label for="historicoData">
+                        Data
+                    </label>
 
-                    <input type="date" id="dateSelect" min="2026-01-01" max="2026-10-31">
+                    <input
+                        type="date"
+                        id="historicoData"
+                        min="2026-01-01"
+                        max="2026-10-31"
+                    >
                 </div>
 
                 <div>
-                    <label for="hourSelect">Horário UTC</label>
+                    <label for="historicoHora">
+                        Horário UTC
+                    </label>
 
-                    <select id="hourSelect">
+                    <select id="historicoHora">
                         <option value="">Todos os horários</option>
                     </select>
                 </div>
 
-                <button id="searchTime">Consultar</button>
+                <button id="consultarHistorico">
+                    Consultar
+                </button>
 
             </div>
 
-            <div id="timeResults"></div>
+            <div id="historicoResultados"></div>
 
         </section>
 
-        <section id="estacoes" class="panel">
+        <dialog id="modalHistorico">
 
-            <div class="section-head">
+            <div class="modal-header">
                 <div>
-                    <span class="eyebrow">BASE METEOROLÓGICA</span>
-        
-                    <h2>Estações meteorológicas</h2>
-        
-                    <p>
-                        Pesquise uma das 634 estações disponíveis
-                        e consulte seus registros máximos.
-                    </p>
-                </div>
-            </div>
-        
-            <div class="filter">
-                <label for="buscaEstacao">Pesquisar estação</label>
-        
-                <input
-                    type="text"
-                    id="buscaEstacao"
-                    placeholder="Nome, estado, região ou código WMO..."
-                >
-            </div>
-        
-            <div id="resultadoEstacoes">
-                <p>Carregando estações...</p>
-            </div>
-        
-        </section>
-
-        <section id="ranking" class="panel">
-
-            <div class="section-head">
-                <div>
-                    <span class="eyebrow">DESTAQUES DO PERÍODO</span>
-
-                    <h2>Maiores eventos registrados</h2>
-
-                    <p>Ranking nacional calculado a partir dos resultados consolidados.</p>
-                </div>
-            </div>
-
-            <div class="two-col">
-
-                <div class="card">
-                    <h3>Precipitação horária</h3>
-
-                    <div id="rainRanking"></div>
+                    <h2 id="modalTitulo">Detalhes da observação</h2>
+                    <p id="modalDescricao"></p>
                 </div>
 
-                <div class="card">
-                    <h3>Rajadas de vento</h3>
-
-                    <div id="windRanking"></div>
-                </div>
-
+                <button id="fecharModal" type="button">
+                    Voltar
+                </button>
             </div>
 
-        </section>
+            <div id="modalConteudo"></div>
+
+        </dialog>
+
 
         <footer>
-            <p>Projeto acadêmico baseado em dados históricos do INMET. Não constitui previsão meteorológica nem alerta oficial.</p>
+            <p>
+                Projeto acadêmico baseado em dados históricos do INMET.
+                Não constitui previsão meteorológica nem alerta oficial.
+            </p>
 
-            <p>Horários apresentados nos registros originais em UTC.</p>
+            <p>
+                Horários apresentados nos registros originais em UTC.
+            </p>
         </footer>
 
     </main>
 
-    <script src="script.js"></script>
+    <script src="tabs.js"></script>
 
 </body>
 </html>
